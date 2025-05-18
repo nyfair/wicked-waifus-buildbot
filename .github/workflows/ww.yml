@@ -1,0 +1,46 @@
+name: ww
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build
+      run: |
+        curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v31.0/protoc-31.0-win64.zip
+        curl -OL https://get.enterprisedb.com/postgresql/postgresql-17.5-1-windows-x64-binaries.zip
+        curl -OL https://git.xeondev.com/wickedwaifus/wicked-waifus-data/releases/download/pioneer_2.4.1/bundle.zip
+        git clone https://git.xeondev.com/wickedwaifus/wicked-waifus-rs.git
+        git clone https://git.xeondev.com/wickedwaifus/wicked-waifus-config-server-files.git
+        move wicked-waifus-config-server-files wicked-waifus-rs\data\assets\config-server
+        7z x bundle.zip
+        move wicked-waifus-data wicked-waifus-rs\data\assets\game-data
+        move version.txt wicked-waifus-rs\data\assets\game-data
+
+        7z x protoc*.zip -o'C:\Users\runneradmin\.cargo'
+        7z x postgres*.zip pgsql/bin pgsql/share pgsql/lib
+        pgsql\bin\initdb -D pgsql\database --username=postgres --encoding=UTF8 --locale=en --lc-collate=C
+        pgsql\bin\pg_ctl start -D pgsql\database
+        pgsql\bin\psql -U postgres -c "CREATE DATABASE shorekeeper;"
+        pgsql\bin\pg_ctl stop -D pgsql\database
+
+        cd wicked-waifus-rs
+        cargo build --release
+        copy target\release\*.exe ..\
+        cd ..
+
+        7z a wicked-waifus-fullsdk.7z wicked-waifus-rs pgsql
+        move wicked-waifus-rs\data .
+        7z a wicked-waifus.7z wicked*.exe pgsql data *.bat
+        move data wicked-waifus-rs\
+    - name: Upload
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: wicked*.7z
+        tag: 2.4.0
+        overwrite: true
+        file_glob: true
