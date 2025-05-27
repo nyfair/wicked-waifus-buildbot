@@ -2,6 +2,9 @@ name: ww
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+    - '.github/workflows/ww.yml'
 
 jobs:
   build:
