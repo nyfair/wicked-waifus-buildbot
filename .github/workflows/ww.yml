@@ -16,8 +16,8 @@ jobs:
         curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v31.0/protoc-31.0-win64.zip
         curl -OL https://get.enterprisedb.com/postgresql/postgresql-17.5-1-windows-x64-binaries.zip
         curl -OL https://git.xeondev.com/wickedwaifus/wicked-waifus-data/releases/download/pioneer_2.4.4/bundle.zip
-        git clone https://git.xeondev.com/wickedwaifus/wicked-waifus-rs.git
-        git clone https://git.xeondev.com/wickedwaifus/wicked-waifus-config-server-files.git
+        git clone --depth 1 https://git.xeondev.com/wickedwaifus/wicked-waifus-rs.git
+        git clone --depth 1 https://git.xeondev.com/wickedwaifus/wicked-waifus-config-server-files.git
         move wicked-waifus-config-server-files wicked-waifus-rs\data\assets\config-server
         7z x bundle.zip
         move wicked-waifus-data wicked-waifus-rs\data\assets\game-data
