@@ -13,9 +13,9 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build
       run: |
-        curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v31.0/protoc-31.0-win64.zip
+        curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v31.1/protoc-31.1-win64.zip
         curl -OL https://get.enterprisedb.com/postgresql/postgresql-17.5-1-windows-x64-binaries.zip
-        curl -OL https://git.xeondev.com/wickedwaifus/wicked-waifus-data/releases/download/pioneer_2.4.4/bundle.zip
+        curl -OL https://git.xeondev.com/wickedwaifus/wicked-waifus-data/releases/download/pioneer_2.5.2/bundle.zip
         git clone --depth 1 https://git.xeondev.com/wickedwaifus/wicked-waifus-rs.git
         git clone --depth 1 https://git.xeondev.com/wickedwaifus/wicked-waifus-config-server-files.git
         move wicked-waifus-config-server-files wicked-waifus-rs\data\assets\config-server
@@ -44,6 +44,6 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: wicked*.7z
-        tag: 2.4.4
+        tag: 2.5.0
         overwrite: true
         file_glob: true
