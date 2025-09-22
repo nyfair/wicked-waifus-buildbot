@@ -10,12 +10,12 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Build
       run: |
-        curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v32.0/protoc-32.0-win64.zip
+        curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v32.1/protoc-32.1-win64.zip
         curl -OL https://get.enterprisedb.com/postgresql/postgresql-17.6-1-windows-x64-binaries.zip
-        curl -OL https://git.xeondev.com/wickedwaifus/wicked-waifus-data/releases/download/pioneer_2.6.2/bundle.zip
+        curl -OL https://git.xeondev.com/wickedwaifus/wicked-waifus-data/releases/download/pioneer_2.7.3/bundle.zip
         git clone --depth 1 https://git.xeondev.com/wickedwaifus/wicked-waifus-rs.git
         git clone --depth 1 https://git.xeondev.com/wickedwaifus/wicked-waifus-config-server-files.git
         move wicked-waifus-config-server-files wicked-waifus-rs\data\assets\config-server
@@ -44,6 +44,6 @@ jobs:
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: wicked*.7z
-        tag: 2.6
+        tag: 2.7
         overwrite: true
         file_glob: true
