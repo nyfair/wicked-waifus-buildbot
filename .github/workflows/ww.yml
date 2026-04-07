@@ -10,40 +10,23 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
+    - uses: mlugg/setup-zig@v2
+      with:
+        version: master
     - name: Build
       run: |
-        curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v32.1/protoc-32.1-win64.zip
-        curl -OL https://get.enterprisedb.com/postgresql/postgresql-18.0-1-windows-x64-binaries.zip
-        curl -OL https://git.xeondev.com/wickedwaifus/wicked-waifus-data/releases/download/pioneer_2.7.5/bundle.zip
-        git clone --depth 1 https://git.xeondev.com/wickedwaifus/wicked-waifus-rs.git
-        git clone --depth 1 https://git.xeondev.com/wickedwaifus/wicked-waifus-config-server-files.git
-        move wicked-waifus-config-server-files wicked-waifus-rs\data\assets\config-server
-        7z x bundle.zip
-        move wicked-waifus-data wicked-waifus-rs\data\assets\game-data
-        move version.txt wicked-waifus-rs\data\assets\game-data
-
-        7z x protoc*.zip -o'C:\Users\runneradmin\.cargo'
-        7z x postgres*.zip pgsql/bin pgsql/share pgsql/lib
-        pgsql\bin\initdb -D pgsql\database --username=postgres --encoding=UTF8 --locale=en
-        pgsql\bin\pg_ctl start -D pgsql\database
-        pgsql\bin\psql -U postgres -c "CREATE DATABASE shorekeeper;"
-        pgsql\bin\pg_ctl stop -D pgsql\database
-
-        cd wicked-waifus-rs
-        cargo build --release
-        copy target\release\*.exe ..\
-        cd ..
-
-        7z a wicked-waifus-fullsdk.7z wicked-waifus-rs pgsql
-        move wicked-waifus-rs\data .
-        7z a wicked-waifus.7z wicked*.exe pgsql data *.bat
-        move data wicked-waifus-rs\
+        git clone https://git.xeondev.com/WavyRooms/zigrika
+        cd zigrika
+        sed -i '/    b.installArtifact(cfgsv)/a \    b.installArtifact(loginsv);' build.zig
+        zig build -Doptimize=ReleaseFast
+        mv zig-out/bin/*.exe ./
+        7z a ..\zigrika.7z assets\ state\ *.exe
     - name: Upload
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: wicked*.7z
-        tag: 2.7.1
+        file: zigrika.7z
+        tag: 3.3beta
         overwrite: true
         file_glob: true
