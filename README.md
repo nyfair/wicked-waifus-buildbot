@@ -10,5 +10,4 @@
 用管理员权限运行helios\_launcher.exe  
 启动游戏后，在左上角登录ip填http://127.0.0.1:10001
 
-自行构建可参考[该编译脚本](https://github.com/nyfair/wicked-waifus-buildbot/blob/master/.github/workflows/ww.yml)
-
+自行构建可参考[该编译脚本](https://github.com/nyfair/zigrika-buildbot/blob/master/.github/workflows/ww.yml)

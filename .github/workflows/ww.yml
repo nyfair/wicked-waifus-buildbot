@@ -14,10 +14,24 @@ jobs:
     - uses: mlugg/setup-zig@v2
       with:
         version: master
+    - name: Cache
+      uses: actions/cache@v5
+      with:
+        path: zigrika
+        key: zigrika
     - name: Build
       run: |
-        git clone https://git.xeondev.com/WavyRooms/zigrika
-        cd zigrika
+        if (Test-Path "zigrika") {
+          echo 'update repo'
+          cd zigrika
+          git pull
+          cd ..
+        } else {
+          echo 'clone repo'
+          git clone https://git.xeondev.com/WavyRooms/zigrika
+        }
+        cp -r zigrika build
+        cd build
         sed -i '/    b.installArtifact(cfgsv)/a \    b.installArtifact(loginsv);' build.zig
         zig build -Doptimize=ReleaseFast
         mv zig-out/bin/*.exe ./
